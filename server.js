@@ -1,8 +1,11 @@
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
-import { extname, join } from 'node:path';
+import { extname } from 'node:path';
 
-const port = 5173;
+import { resoudreCheminDemande } from './src/cheminSecurise.js';
+
+const port = Number(process.env.PORT) || 5173;
+const hote = '127.0.0.1';
 const racine = process.cwd();
 
 const typesDeContenu = {
@@ -10,28 +13,42 @@ const typesDeContenu = {
   '.js': 'text/javascript; charset=utf-8'
 };
 
+const ENTETES_SECURITE = {
+  'X-Content-Type-Options': 'nosniff'
+};
+
+function repondreErreur(reponse, code, message) {
+  reponse.writeHead(code, {
+    'Content-Type': 'text/plain; charset=utf-8',
+    ...ENTETES_SECURITE
+  });
+
+  reponse.end(message);
+}
+
 const serveur = createServer(async (requete, reponse) => {
-  const cheminDemande = requete.url === '/' ? '/index.html' : requete.url;
-  const cheminFichier = join(racine, cheminDemande);
+  const cheminFichier = resoudreCheminDemande(racine, requete.url);
+
+  if (cheminFichier === null) {
+    repondreErreur(reponse, 403, 'Accès refusé.');
+    return;
+  }
 
   try {
     const contenu = await readFile(cheminFichier);
     const extension = extname(cheminFichier);
 
     reponse.writeHead(200, {
-      'Content-Type': typesDeContenu[extension] || 'text/plain; charset=utf-8'
+      'Content-Type': typesDeContenu[extension] || 'text/plain; charset=utf-8',
+      ...ENTETES_SECURITE
     });
 
     reponse.end(contenu);
   } catch {
-    reponse.writeHead(404, {
-      'Content-Type': 'text/plain; charset=utf-8'
-    });
-
-    reponse.end('Fichier introuvable.');
+    repondreErreur(reponse, 404, 'Fichier introuvable.');
   }
 });
 
-serveur.listen(port, () => {
-  console.log(`Serveur de développement disponible sur http://localhost:${port}`);
+serveur.listen(port, hote, () => {
+  console.log(`Serveur de développement disponible sur http://${hote}:${port}`);
 });
