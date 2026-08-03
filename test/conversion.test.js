@@ -4,6 +4,10 @@ import assert from 'node:assert/strict';
 import {
   convertirCelsiusEnFahrenheit,
   convertirFahrenheitEnCelsius,
+  convertirCelsiusEnKelvin,
+  convertirKelvinEnCelsius,
+  convertirCelsiusEnRankine,
+  convertirRankineEnCelsius,
   arrondirTemperature,
   lireTemperature
 } from '../src/conversion.js';
@@ -18,6 +22,27 @@ test('convertit les degrés Fahrenheit en degrés Celsius', () => {
   assert.equal(convertirFahrenheitEnCelsius(212), 100);
   assert.equal(convertirFahrenheitEnCelsius(68), 20);
   assert.equal(convertirFahrenheitEnCelsius(-40), -40);
+});
+
+test('convertit les degrés Celsius en Kelvin', () => {
+  assert.equal(convertirCelsiusEnKelvin(0), 273.15);
+  assert.equal(convertirCelsiusEnKelvin(100), 373.15);
+});
+
+test('convertit les Kelvin en degrés Celsius', () => {
+  assert.equal(convertirKelvinEnCelsius(273.15), 0);
+  assert.equal(convertirKelvinEnCelsius(373.15), 100);
+  assert.equal(convertirKelvinEnCelsius(0), -273.15);
+});
+
+test('convertit les degrés Celsius en Rankine', () => {
+  assert.equal(convertirCelsiusEnRankine(0), 491.67);
+  assert.equal(arrondirTemperature(convertirCelsiusEnRankine(100)), 671.7);
+});
+
+test('convertit les Rankine en degrés Celsius', () => {
+  assert.equal(convertirRankineEnCelsius(491.67), 0);
+  assert.equal(arrondirTemperature(convertirRankineEnCelsius(671.67)), 100);
 });
 
 test('convertit et arrondit une température Fahrenheit comme dans l\'interface', () => {
