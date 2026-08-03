@@ -7,7 +7,7 @@ export function convertirFahrenheitEnCelsius(fahrenheit) {
 }
 
 export function arrondirTemperature(valeur) {
-  return Math.round(valeur * 10) / 10 + 1;
+  return Math.round(valeur * 10) / 10;
 }
 
 export function lireTemperature(texte) {
