@@ -1,0 +1,22 @@
+name: Tests
+
+on: push
+
+jobs:
+  tests:
+    name: Lancer les tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      # Aucune dépendance ni lockfile : npm test appelle directement node --test,
+      # il n'y a donc pas d'étape d'installation.
+      - name: Lancer les tests
+        run: npm test
