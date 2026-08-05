@@ -1,7 +1,6 @@
 import {
   convertirCelsiusEnFahrenheit,
   convertirFahrenheitEnCelsius,
-  convertirCelsiusEnKelvin,
   arrondirTemperature,
   lireTemperature
 } from './conversion.js';
@@ -15,10 +14,6 @@ const paragrapheResultat = document.querySelector('#resultat');
 const champTemperatureFahrenheit = document.querySelector('#temperature-fahrenheit');
 const boutonConvertirFahrenheit = document.querySelector('#convertir-fahrenheit');
 const paragrapheResultatFahrenheit = document.querySelector('#resultat-fahrenheit');
-
-const champTemperatureKelvin = document.querySelector('#temperature-kelvin');
-const boutonConvertirKelvin = document.querySelector('#convertir-kelvin');
-const paragrapheResultatKelvin = document.querySelector('#resultat-kelvin');
 
 function displayConversion() {
   const celsiusValue = lireTemperature(temperatureInput.value);
@@ -52,22 +47,5 @@ function afficherConversionFahrenheit() {
     `${temperatureFahrenheit} °F correspondent à ${temperatureCelsius} °C.`;
 }
 
-function afficherConversionKelvin() {
-  const temperatureCelsius = lireTemperature(champTemperatureKelvin.value);
-
-  if (temperatureCelsius === null) {
-    paragrapheResultatKelvin.textContent = ERROR_MESSAGE;
-    return;
-  }
-
-  const temperatureKelvin = arrondirTemperature(
-    convertirCelsiusEnKelvin(temperatureCelsius)
-  );
-
-  paragrapheResultatKelvin.textContent =
-    `${temperatureCelsius} °C correspondent à ${temperatureKelvin} K.`;
-}
-
 convertButton.addEventListener('click', displayConversion);
 boutonConvertirFahrenheit.addEventListener('click', afficherConversionFahrenheit);
-boutonConvertirKelvin.addEventListener('click', afficherConversionKelvin);
