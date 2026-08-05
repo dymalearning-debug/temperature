@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "node --test",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "hooks": "node outils/serveurHooks.js"
   }
 }
