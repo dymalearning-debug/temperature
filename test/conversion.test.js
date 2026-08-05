@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import {
   convertirCelsiusEnFahrenheit,
   convertirFahrenheitEnCelsius,
+  convertirCelsiusEnKelvin,
   arrondirTemperature,
   lireTemperature
 } from '../src/conversion.js';
@@ -18,6 +19,12 @@ test('convertit les degrés Fahrenheit en degrés Celsius', () => {
   assert.equal(convertirFahrenheitEnCelsius(212), 100);
   assert.equal(convertirFahrenheitEnCelsius(68), 20);
   assert.equal(convertirFahrenheitEnCelsius(-40), -40);
+});
+
+test('convertit les degrés Celsius en kelvins', () => {
+  assert.equal(convertirCelsiusEnKelvin(0), 273.15);
+  assert.equal(convertirCelsiusEnKelvin(100), 373.15);
+  assert.equal(convertirCelsiusEnKelvin(-273.15), 0);
 });
 
 test('convertit et arrondit une température Fahrenheit comme dans l\'interface', () => {
