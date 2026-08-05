@@ -19,6 +19,16 @@
             "statusMessage": "Vérification du nommage français"
           }
         ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://localhost:4000/hooks/tools",
+            "timeout": 2
+          }
+        ]
       }
     ]
   }
