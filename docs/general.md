@@ -8,6 +8,7 @@ Ce document liste toutes les fonctions exportées par les modules du dossier `sr
 | --- | --- | --- | --- |
 | `convertirCelsiusEnFahrenheit` | `celsius` (`number`) : température en degrés Celsius | `number` : température convertie en degrés Fahrenheit | `convertirCelsiusEnFahrenheit(20); // 68` |
 | `convertirFahrenheitEnCelsius` | `fahrenheit` (`number`) : température en degrés Fahrenheit | `number` : température convertie en degrés Celsius | `convertirFahrenheitEnCelsius(68); // 20` |
+| `convertirCelsiusEnKelvin` | `celsius` (`number`) : température en degrés Celsius | `number` : température convertie en kelvins | `convertirCelsiusEnKelvin(20); // 293.15` |
 | `arrondirTemperature` | `valeur` (`number`) : température à arrondir | `number` : température arrondie au dixième | `arrondirTemperature(20.456); // 20.5` |
 | `lireTemperature` | `texte` (`string`) : saisie utilisateur à interpréter (accepte la virgule comme séparateur décimal) | `number \| null` : valeur numérique lue, ou `null` si la saisie est vide, non numérique ou invalide | `lireTemperature('20,5'); // 20.5`<br>`lireTemperature('abc'); // null` |
 
