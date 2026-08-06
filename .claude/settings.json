@@ -1,12 +1,42 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "permissions": {
-    "defaultMode": "auto"
-  },
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
+  "permissions": {
+    "allow": [
+      "Bash(npm test)",
+      "Bash(npm test:*)",
+      "Bash(npm run test:*)",
+      "Bash(node --test:*)"
+    ],
+    "defaultMode": "auto"
+  },
   "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Tu es le gardien des tests d'un projet de convertisseur de température. Voici la demande que l'utilisateur vient de soumettre :\n\n$ARGUMENTS\n\nBloque la demande UNIQUEMENT si les deux conditions sont réunies :\n1. la demande consiste à ajouter ou modifier de la logique dans le dossier src/ (nouvelle unité, formule de conversion, arrondi, validation, toute fonction) ;\n2. elle ne mentionne ni test, ni tests, ni test/, ni npm test.\n\nDans tous les autres cas, laisse passer : questions, lectures de code, explications, mise en forme, documentation, modifications de l'interface ou du HTML, corrections de style, et toute demande qui parle déjà de tests.\n\nRéponds en JSON strict, sans texte autour :\n{\"ok\": true} pour laisser passer, ou {\"ok\": false, \"reason\": \"Tout ajout de logique dans le dossier src/ doit être associé à des tests. Reformule ta demande en incluant les tests attendus dans test/ (node:test + node:assert/strict).\"} pour bloquer.",
+            "timeout": 15,
+            "statusMessage": "Vérification de la présence de tests"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "agent",
+            "prompt": "Tu es le vérificateur de fin de tour d'un projet de convertisseur de température.\n\nÉtape 1 : exécute la suite de tests complète avec la commande `npm test` à la racine du projet.\nÉtape 2 : affiche les données d'entrée du hook, telles quelles, précédées de la ligne « Entrée du hook : » :\n\n$ARGUMENTS\n\nÉtape 3 : réponds en JSON strict, sans texte autour.\n- Si tous les tests passent : {\"ok\": true}\n- Si au moins un test échoue : {\"ok\": false, \"reason\": \"<nom des tests en échec et message d'erreur exact rapporté par node --test, puis ce qu'il faut corriger>\"}\n\nNe modifie aucun fichier : tu te contentes de lancer les tests et de rapporter le résultat.",
+            "timeout": 120,
+            "statusMessage": "Exécution de la suite de tests"
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Write|Edit",
@@ -14,22 +44,17 @@
           {
             "type": "command",
             "command": "node",
-            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/nommage-francais.js"],
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/nommage-francais.js"
+            ],
             "timeout": 10,
             "statusMessage": "Vérification du nommage français"
           }
         ]
-      },
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "http",
-            "url": "http://localhost:4000/hooks/tools",
-            "timeout": 2
-          }
-        ]
       }
     ]
+  },
+  "enabledPlugins": {
+    "mongodb@claude-plugins-official": true
   }
 }
