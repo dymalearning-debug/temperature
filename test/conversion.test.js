@@ -7,6 +7,8 @@ import {
   convertirCelsiusEnKelvin,
   arrondirTemperature,
   lireTemperature,
+  CONVERSIONS,
+  trouverConversion,
 } from "../src/conversion.js";
 
 test("convertit les degrés Celsius en degrés Fahrenheit", () => {
@@ -60,4 +62,31 @@ test("rejette une saisie non numérique sans produire NaN", () => {
   assert.equal(lireTemperature("abc"), null);
   assert.equal(lireTemperature("20abc"), null);
   assert.equal(lireTemperature("Infinity"), null);
+});
+
+test("expose un catalogue de conversions aux identifiants uniques", () => {
+  const identifiants = CONVERSIONS.map((conversion) => conversion.identifiant);
+
+  assert.equal(identifiants.length, 3);
+  assert.equal(new Set(identifiants).size, identifiants.length);
+
+  for (const conversion of CONVERSIONS) {
+    assert.equal(typeof conversion.libelle, "string");
+    assert.equal(typeof conversion.uniteSource, "string");
+    assert.equal(typeof conversion.uniteCible, "string");
+    assert.equal(typeof conversion.convertir, "function");
+  }
+});
+
+test("retrouve une conversion par son identifiant", () => {
+  const conversion = trouverConversion("fahrenheit-vers-celsius");
+
+  assert.equal(conversion.uniteSource, "°F");
+  assert.equal(conversion.uniteCible, "°C");
+  assert.equal(conversion.convertir(68), 20);
+});
+
+test("retourne null pour un identifiant de conversion inconnu", () => {
+  assert.equal(trouverConversion("celsius-vers-rankine"), null);
+  assert.equal(trouverConversion(""), null);
 });

@@ -8,8 +8,12 @@ Ce document liste toutes les fonctions exportées par les modules du dossier `sr
 | --- | --- | --- | --- |
 | `convertirCelsiusEnFahrenheit` | `celsius` (`number`) : température en degrés Celsius | `number` : température convertie en degrés Fahrenheit | `convertirCelsiusEnFahrenheit(20); // 68` |
 | `convertirFahrenheitEnCelsius` | `fahrenheit` (`number`) : température en degrés Fahrenheit | `number` : température convertie en degrés Celsius | `convertirFahrenheitEnCelsius(68); // 20` |
+| `convertirCelsiusEnKelvin` | `celsius` (`number`) : température en degrés Celsius | `number` : température convertie en kelvins | `convertirCelsiusEnKelvin(20); // 293.15` |
+| `trouverConversion` | `identifiant` (`string`) : identifiant d'une conversion du catalogue `CONVERSIONS` | `object \| null` : la conversion correspondante (`identifiant`, `libelle`, `uniteSource`, `uniteCible`, `convertir`), ou `null` si l'identifiant est inconnu | `trouverConversion('celsius-vers-kelvin').uniteCible; // 'K'`<br>`trouverConversion('inconnu'); // null` |
 | `arrondirTemperature` | `valeur` (`number`) : température à arrondir | `number` : température arrondie au dixième | `arrondirTemperature(20.456); // 20.5` |
 | `lireTemperature` | `texte` (`string`) : saisie utilisateur à interpréter (accepte la virgule comme séparateur décimal) | `number \| null` : valeur numérique lue, ou `null` si la saisie est vide, non numérique ou invalide | `lireTemperature('20,5'); // 20.5`<br>`lireTemperature('abc'); // null` |
+
+Ce module exporte aussi la constante `CONVERSIONS` : le catalogue des conversions proposées dans la liste déroulante de l'interface. Chaque entrée contient un `identifiant`, un `libelle` affiché, les unités `uniteSource` / `uniteCible` et la fonction `convertir` à appliquer.
 
 ## `src/cheminSecurise.js`
 

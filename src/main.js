@@ -1,73 +1,51 @@
 import {
-  convertirCelsiusEnFahrenheit,
-  convertirFahrenheitEnCelsius,
-  convertirCelsiusEnKelvin,
+  CONVERSIONS,
+  trouverConversion,
   arrondirTemperature,
   lireTemperature
 } from './conversion.js';
 
 const MESSAGE_ERREUR = 'Veuillez saisir une température valide.';
 
+const listeTypeConversion = document.querySelector('#type-conversion');
 const champTemperature = document.querySelector('#temperature');
 const boutonConvertir = document.querySelector('#convertir');
 const paragrapheResultat = document.querySelector('#resultat');
 
-const champTemperatureFahrenheit = document.querySelector('#temperature-fahrenheit');
-const boutonConvertirFahrenheit = document.querySelector('#convertir-fahrenheit');
-const paragrapheResultatFahrenheit = document.querySelector('#resultat-fahrenheit');
-
-const champTemperatureKelvin = document.querySelector('#temperature-kelvin');
-const boutonConvertirKelvin = document.querySelector('#convertir-kelvin');
-const paragrapheResultatKelvin = document.querySelector('#resultat-kelvin');
+function remplirListeTypeConversion() {
+  for (const conversion of CONVERSIONS) {
+    const option = document.createElement('option');
+    option.value = conversion.identifiant;
+    option.textContent = conversion.libelle;
+    listeTypeConversion.append(option);
+  }
+}
 
 function afficherConversion() {
-  const temperatureCelsius = lireTemperature(champTemperature.value);
+  const conversion = trouverConversion(listeTypeConversion.value);
 
-  if (temperatureCelsius === null) {
+  if (conversion === null) {
     paragrapheResultat.textContent = MESSAGE_ERREUR;
     return;
   }
 
-  const temperatureFahrenheit = arrondirTemperature(
-    convertirCelsiusEnFahrenheit(temperatureCelsius)
+  const temperatureSource = lireTemperature(champTemperature.value);
+
+  if (temperatureSource === null) {
+    paragrapheResultat.textContent = MESSAGE_ERREUR;
+    return;
+  }
+
+  const temperatureCible = arrondirTemperature(
+    conversion.convertir(temperatureSource)
   );
 
   paragrapheResultat.textContent =
-    `${temperatureCelsius} °C correspondent à ${temperatureFahrenheit} °F.`;
+    `${temperatureSource} ${conversion.uniteSource} correspondent à ` +
+    `${temperatureCible} ${conversion.uniteCible}.`;
 }
 
-function afficherConversionFahrenheit() {
-  const temperatureFahrenheit = lireTemperature(champTemperatureFahrenheit.value);
-
-  if (temperatureFahrenheit === null) {
-    paragrapheResultatFahrenheit.textContent = MESSAGE_ERREUR;
-    return;
-  }
-
-  const temperatureCelsius = arrondirTemperature(
-    convertirFahrenheitEnCelsius(temperatureFahrenheit)
-  );
-
-  paragrapheResultatFahrenheit.textContent =
-    `${temperatureFahrenheit} °F correspondent à ${temperatureCelsius} °C.`;
-}
-
-function afficherConversionKelvin() {
-  const temperatureCelsius = lireTemperature(champTemperatureKelvin.value);
-
-  if (temperatureCelsius === null) {
-    paragrapheResultatKelvin.textContent = MESSAGE_ERREUR;
-    return;
-  }
-
-  const temperatureKelvin = arrondirTemperature(
-    convertirCelsiusEnKelvin(temperatureCelsius)
-  );
-
-  paragrapheResultatKelvin.textContent =
-    `${temperatureCelsius} °C correspondent à ${temperatureKelvin} K.`;
-}
+remplirListeTypeConversion();
 
 boutonConvertir.addEventListener('click', afficherConversion);
-boutonConvertirFahrenheit.addEventListener('click', afficherConversionFahrenheit);
-boutonConvertirKelvin.addEventListener('click', afficherConversionKelvin);
+listeTypeConversion.addEventListener('change', afficherConversion);

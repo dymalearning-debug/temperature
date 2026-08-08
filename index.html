@@ -50,7 +50,8 @@
         color: var(--mauve-fonce);
       }
 
-      input {
+      input,
+      select {
         width: 100%;
         box-sizing: border-box;
         padding: 0.625rem 0.75rem;
@@ -58,9 +59,12 @@
         border: 1px solid var(--mauve-bordure);
         border-radius: 0.5rem;
         outline: none;
+        background-color: #ffffff;
+        color: inherit;
       }
 
-      input:focus {
+      input:focus,
+      select:focus {
         border-color: var(--mauve);
         box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
       }
@@ -101,26 +105,15 @@
     <main>
       <h1>Convertisseur de température</h1>
 
-      <label for="temperature">Température en Celsius</label>
+      <label for="type-conversion">Type de conversion</label>
+      <select id="type-conversion"></select>
+
+      <label for="temperature">Température à convertir</label>
       <input id="temperature" value="20" />
 
       <button id="convertir">Convertir</button>
 
       <p id="resultat">20 °C correspondent à 68 °F.</p>
-
-      <label for="temperature-fahrenheit">Température en Fahrenheit</label>
-      <input id="temperature-fahrenheit" value="68" />
-
-      <button id="convertir-fahrenheit">Convertir</button>
-
-      <p id="resultat-fahrenheit">68 °F correspondent à 20 °C.</p>
-
-      <label for="temperature-kelvin">Température en Celsius (vers Kelvin)</label>
-      <input id="temperature-kelvin" value="20" />
-
-      <button id="convertir-kelvin">Convertir</button>
-
-      <p id="resultat-kelvin">20 °C correspondent à 293.2 K.</p>
     </main>
 
     <script type="module" src="./src/main.js"></script>
